@@ -26,7 +26,6 @@ export async function login() {
       OAuthProvider.Google,
       redirectUri
     );
-    console.log("RESPONSE ", response);
 
     if (!response) throw new Error("Failed to sign in");
 

@@ -3,6 +3,7 @@ import Search from "@/components/Search";
 import icons from "@/constants/icons";
 import { useGlobalContext } from "@/lib/global-provider";
 import { GetGreetings } from "@/utils/index.utils";
+import { router } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -13,10 +14,12 @@ const HomeHeader = () => {
   return (
     <View className="flex flex-row items-center justify-between mt-5">
       <View className="flex-row items-center">
-        <Image
-          className="size-12 rounded-full "
-          source={{ uri: user?.avatar }}
-        />
+        <TouchableOpacity onPress={() =>router.push("/profile")}>
+          <Image
+            className="size-12 rounded-full "
+            source={{ uri: user?.avatar }}
+          />
+        </TouchableOpacity>
         <View className="flex flex-col items-start justify-center ml-2">
           <Text className="text-xs font-base font-rubik-medium text-black-100">
             {greetings},

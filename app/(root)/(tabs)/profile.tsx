@@ -46,7 +46,6 @@ const SettingsItem = ({
 };
 const Profile = () => {
   const { user, refetch } = useGlobalContext();
-  console.log(user?.avatar);
   
   const handleLogout = async () => {
     const results = await logout();

@@ -1,11 +1,34 @@
 import icons from "@/constants/icons";
 import images from "@/constants/images";
+import { login } from "@/lib/appwrite";
+import { useGlobalContext } from "@/lib/global-provider";
+import { Redirect } from "expo-router";
 import React from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignIn = () => {
-  const handleLogin = () => {};
+  const { loading, refetch, isLoggedIn } = useGlobalContext();
+
+  if (!loading && isLoggedIn) return <Redirect href={"/"} />;
+
+  const handleLogin = async () => {
+    const results = await login();
+    if (results) {
+      refetch({});
+      console.log("Login Success");
+    } else {
+      Alert.alert("Failed to login");
+    }
+  };
   return (
     <SafeAreaView className="h-full flex-1 bg-white">
       <ScrollView contentContainerClassName="flex-1 h-full ">
@@ -25,18 +48,21 @@ const SignIn = () => {
           <Text className="text-lg text-center mt-12 text-black-200 font-rubik">
             Login to ReState with Google
           </Text>
-
           <TouchableOpacity
             className="bg-white shadow-md shadow-zinc-300 rounded-full w-full py-4 mt-5"
             // style={{ elevation: 10 }}
             onPress={handleLogin}
           >
             <View className=" flex-row items-center justify-center">
-              <Image
-                source={icons.google}
-                className="h-5 w-5"
-                resizeMode="contain"
-              />
+              {loading ? (
+                <ActivityIndicator size={"small"} />
+              ) : (
+                <Image
+                  source={icons.google}
+                  className="h-5 w-5"
+                  resizeMode="contain"
+                />
+              )}
               <Text className="text-lg font-rubik-medium text-black-300 ml-2">
                 Continue with Google
               </Text>

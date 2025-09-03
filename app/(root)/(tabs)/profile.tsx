@@ -46,7 +46,7 @@ const SettingsItem = ({
 };
 const Profile = () => {
   const { user, refetch } = useGlobalContext();
-  
+
   const handleLogout = async () => {
     const results = await logout();
 
@@ -86,12 +86,7 @@ const Profile = () => {
         </View>
         <View className="flex flex-col mt-10 border-t pt-5 border-primary-200">
           {settings.slice(3).map((item, index) => (
-            <SettingsItem
-              key={index}
-              icon={item.icon}
-              text={item.title}
-              // onPress={item.onPress}
-            />
+            <SettingsItem key={index} icon={item.icon} text={item.title} />
           ))}
         </View>
         <View className="flex flex-col mt-10  border-primary-200">

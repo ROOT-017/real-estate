@@ -1,11 +1,24 @@
+import { Property } from "@/types/types";
 import * as Linking from "expo-linking";
 import { openAuthSessionAsync } from "expo-web-browser";
-import { Account, Avatars, Client, OAuthProvider } from "react-native-appwrite";
+import {
+  Account,
+  Avatars,
+  Client,
+  Databases,
+  OAuthProvider,
+  Query,
+} from "react-native-appwrite";
 
 export const config = {
   platform: "com.restate.com",
   endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENPOINT,
   projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID,
+  databaseId: process.env.EXPO_PUBLIC_APPRITE_DATABASE_ID,
+  galleries_table: process.env.EXPO_PUBLIC_APPWRITE_GALLERIES_TABLE,
+  agents_table: process.env.EXPO_PUBLIC_APPWRITE_AGENTS_TABLE,
+  reviews_table: process.env.EXPO_PUBLIC_APPWRITE_REVIEWS_TABLE,
+  properties_table: process.env.EXPO_PUBLIC_APPWRITE_PROPERTIES_TABLE,
 };
 
 export const client = new Client();
@@ -17,6 +30,7 @@ client
 
 export const avatar = new Avatars(client);
 export const account = new Account(client);
+export const databases = new Databases(client);
 
 export async function login() {
   try {
@@ -32,7 +46,7 @@ export async function login() {
     const browserResults = await openAuthSessionAsync(
       response.toString(),
       redirectUri
-    );    
+    );
 
     if (browserResults.type !== "success") throw new Error("Failed to sign in");
 
@@ -86,5 +100,58 @@ export const getCurrentUser = async () => {
   } catch (err) {
     console.log(err);
     return null;
+  }
+};
+
+export const getLatestProperties = async () => {
+  try {
+    const results = await databases.listDocuments<Property>(
+      config.databaseId ?? "",
+      config.properties_table ?? "",
+      [Query.orderAsc("$createdAt"), Query.limit(5)]
+    );
+    return results.documents;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getProperties = async ({
+  filter,
+  query,
+  limit,
+}: {
+  limit?: number;
+  query?: string;
+  filter?: string;
+}) => {
+  try {
+    const buildQuery = [Query.orderAsc("$createdAt")];
+    if (filter && filter !== "All") {
+      buildQuery.push(Query.equal("type", filter));
+    }
+
+    if (query) {
+      buildQuery.push(
+        Query.or([
+          Query.search("name", query),
+          Query.search("address", query),
+          Query.search("type", query),
+        ])
+      );
+    }
+
+    if (limit) {
+      buildQuery.push(Query.limit(limit));
+    }
+
+    const results = await databases.listDocuments<Property>(
+      config.databaseId ?? "",
+      config.properties_table ?? "",
+      buildQuery
+    );
+    return results.documents;
+  } catch (err) {
+    console.log(err);
   }
 };

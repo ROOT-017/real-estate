@@ -6,7 +6,7 @@ import { useDebouncedCallback } from "use-debounce";
 
 const Search = () => {
   const debouncedSearch = useDebouncedCallback(
-    (text: string) => router.setParams({ search: text }),
+    (text: string) => router.setParams({ query: text }),
     500
   );
   const params = useLocalSearchParams();
@@ -15,6 +15,7 @@ const Search = () => {
 
   const handleSearch = (text: string) => {
     setSearch(text);
+    debouncedSearch(text)
   };
 
   return (
@@ -25,7 +26,7 @@ const Search = () => {
           value={search}
           onChangeText={handleSearch}
           placeholder="Search for anything"
-          className="text-sm font-rubik flex-1  text-black-300 ml-2"
+          className="text-sm font-rubik flex-1 text-black-300 ml-2"
         />
       </View>
       <TouchableOpacity>

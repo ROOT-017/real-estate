@@ -1,5 +1,7 @@
-import { propertyTypes } from "@/lib/seed";
+import { propertyTypes } from "@/constants/data";
 import { Models } from "react-native-appwrite";
+
+export type PropertyType = (typeof propertyTypes)[number];
 
 export interface Property extends Models.Document {
   name: string;
@@ -7,14 +9,16 @@ export interface Property extends Models.Document {
   address: string;
   image: string;
   facilities: string[];
-  type: keyof typeof propertyTypes;
-  agent: any;
+  type: PropertyType;
+  agent: Agent;
   description: string;
   price: number;
   bedrooms: number;
   bathrooms: number;
   getLocation: string;
   reviews: any[];
+  area: number;
+  gallery: Gallery[];
 }
 
 export interface Agent extends Models.Document {
@@ -27,6 +31,7 @@ export interface Review extends Models.Document {
   avatar: string;
   rating: number;
   review: string;
+  date: string;
 }
 
 export interface Gallery extends Models.Document {

@@ -42,13 +42,15 @@ const HomeHeader = () => {
           </Text>
         </View>
       </View>
-      <Image source={icons.bell} className="size-6" />
+      <TouchableOpacity onPress={()=>router.push('/notifications')}>
+        <Image source={icons.bell} className="size-6" />
+      </TouchableOpacity>
     </View>
   );
 };
 export default function Index() {
   const params = useLocalSearchParams<{
-    filters?: string;
+    filter?: string;
     query?: string;
   }>();
 
@@ -72,9 +74,9 @@ export default function Index() {
   };
 
   useEffect(() => {
-    refetch({ filters: params.filters, query: params.query, limit: 8 });
+    refetch({ filter: params.filter, query: params.query, limit: 8 });
     //eslint-disable-next-line
-  }, [params.filters, params.query]);
+  }, [params.filter, params.query]);
 
   return (
     <SafeAreaView className="bg-white h-full">
@@ -101,8 +103,8 @@ export default function Index() {
                 <Text className="text-xl font-rubik-bold text-black-300">
                   Featured
                 </Text>
-                <TouchableOpacity>
-                  <Text className="text-base font-rubik-bold text-primary-300">
+                <TouchableOpacity onPress={()=>router.push('/(root)/properties/properties?filter=Featured')}>
+                  <Text className="text-base font-rubik-medium text-primary-300">
                     See All
                   </Text>
                 </TouchableOpacity>
@@ -133,8 +135,8 @@ export default function Index() {
                 <Text className="text-xl font-rubik-bold text-black-300">
                   Our Recommendation
                 </Text>
-                <TouchableOpacity>
-                  <Text className="text-base font-rubik-bold text-primary-300">
+                <TouchableOpacity onPress={()=>router.push('/(root)/properties/properties?filter=Recommendation')}>
+                  <Text className="text-base font-rubik-medium text-primary-300">
                     See All
                   </Text>
                 </TouchableOpacity>

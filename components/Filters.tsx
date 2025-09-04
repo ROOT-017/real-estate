@@ -4,19 +4,19 @@ import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity } from "react-native";
 
 const Filters = () => {
-  const params = useLocalSearchParams<{ filters?: string }>();
+  const params = useLocalSearchParams<{ filter?: string }>();
   const [selectedCategory, setSelectedCategory] = useState(
-    params.filters || "All"
+    params.filter || "All"
   );
   const handleCategoryPress = (category: string) => {
     if (selectedCategory === category) {
       setSelectedCategory("All");
-      router.setParams({ filters: "All" });
+      router.setParams({ filter: "All" });
       return;
     }
 
     setSelectedCategory(category);
-    router.setParams({ filters: category });
+    router.setParams({ filter: category });
   };
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>

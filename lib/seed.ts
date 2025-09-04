@@ -1,5 +1,6 @@
+import { propertyTypes } from "@/constants/data";
 import { ID } from "react-native-appwrite";
-import { databases, config } from "./appwrite";
+import { config, databases } from "./appwrite";
 import {
   agentImages,
   galleryImages,
@@ -8,22 +9,11 @@ import {
 } from "./data";
 
 const COLLECTIONS = {
-  AGENT: config.agents_table,//config.agentsCollectionId,
-  REVIEWS: config.reviews_table,//config.reviewsCollectionId,
-  GALLERY: config.galleries_table,//config.galleriesCollectionId,
-  PROPERTY: config.properties_table//config.propertiesCollectionId,
+  AGENT: config.agents_table, //config.agentsCollectionId,
+  REVIEWS: config.reviews_table, //config.reviewsCollectionId,
+  GALLERY: config.galleries_table, //config.galleriesCollectionId,
+  PROPERTY: config.properties_table, //config.propertiesCollectionId,
 };
-
-export const propertyTypes = [
-  "House",
-  "Townhouse",
-  "Condo",
-  "Duplex",
-  "Studio",
-  "Villa",
-  "Apartment",
-  "Other",
-];
 
 export const facilities = [
   "Laundry",
@@ -33,7 +23,7 @@ export const facilities = [
   "Swimming-pool",
   "Wifi",
   "Pet-center",
-  "Parking"
+  "Parking",
 ];
 
 function getRandomSubset<T>(
@@ -71,8 +61,8 @@ function getRandomSubset<T>(
 }
 
 async function seed() {
-    console.log('Seeding Began');
-    
+  console.log("Seeding Began");
+
   try {
     // Clear existing data from all collections
     for (const key in COLLECTIONS) {

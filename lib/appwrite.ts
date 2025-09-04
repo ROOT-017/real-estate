@@ -125,6 +125,8 @@ export const getProperties = async ({
   query?: string;
   filter?: string;
 }) => {
+  // console.log({ filter, query, limit });
+
   try {
     const buildQuery = [Query.orderAsc("$createdAt")];
     if (filter && filter !== "All") {
@@ -151,6 +153,20 @@ export const getProperties = async ({
       buildQuery
     );
     return results.documents;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getPropertyById = async ({ id }: { id: string }) => {
+  try {
+    const results = await databases.getDocument<Property>(
+      config.databaseId ?? "",
+      config.properties_table ?? "",
+      id
+    );
+
+    return results;
   } catch (err) {
     console.log(err);
   }

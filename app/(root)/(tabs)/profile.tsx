@@ -3,6 +3,7 @@ import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { logout } from "@/lib/appwrite";
 import { useGlobalContext } from "@/lib/global-provider";
+import { RelativePathString, router } from "expo-router";
 import React from "react";
 import {
   Alert,
@@ -66,7 +67,9 @@ const Profile = () => {
       >
         <View className="flex-row justify-between mt-5 items-center">
           <Text className="text-xl font-rubik-bold ">Profile</Text>
-          <Image className="size-5" source={icons.bell} />
+          <TouchableOpacity>
+            <Image className="size-5" source={icons.bell} />
+          </TouchableOpacity>
         </View>
         <View className="flex-row mt-5 justify-center">
           <View className="flex-col items-center relative mt-5">
@@ -86,7 +89,12 @@ const Profile = () => {
         </View>
         <View className="flex flex-col mt-10 border-t pt-5 border-primary-200">
           {settings.slice(3).map((item, index) => (
-            <SettingsItem key={index} icon={item.icon} text={item.title} />
+            <SettingsItem
+              key={index}
+              icon={item.icon}
+              text={item.title}
+              onPress={item.path ? () => router.push(item.path as RelativePathString) : undefined}
+            />
           ))}
         </View>
         <View className="flex flex-col mt-10  border-primary-200">

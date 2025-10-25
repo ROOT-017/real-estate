@@ -19,7 +19,6 @@ export const GetGreetings = () => {
 
 export const getFilterTypeTitle = (type: string) => {
   const data = categories.find((item) => item.category === type);
-
   return data?.title;
 };
 

@@ -1,5 +1,6 @@
 import { Card, FeatureCards } from "@/components/Cards";
 import Filters from "@/components/Filters";
+import HeaderBar from "@/components/HeaderBar";
 import NoResults from "@/components/NoResults";
 import Search from "@/components/Search";
 import icons from "@/constants/icons";
@@ -19,40 +20,45 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const HomeHeader = () => {
-  const { user } = useGlobalContext();
-  const { greetings } = GetGreetings();
+// const HomeHeader = () => {
+//   const { user } = useGlobalContext();
+//   const { greetings } = GetGreetings();
 
-  return (
-    <View className="flex flex-row items-center justify-between mt-5">
-      <View className="flex-row items-center">
-        <TouchableOpacity onPress={() => router.push("/profile")}>
-          <Image
-            className="size-12 rounded-full "
-            source={{ uri: user?.avatar }}
-          />
-        </TouchableOpacity>
-        <View className="flex flex-col items-start justify-center ml-2">
-          <Text className="text-xs font-base font-rubik-medium text-black-100">
-            {greetings},
-          </Text>
+//   return (
+//     <View className="flex flex-row items-center justify-between mt-5">
+//       <View className="flex-row items-center">
+//         <TouchableOpacity onPress={() => router.push("/profile")}>
+//           <Image
+//             className="size-12 rounded-full "
+//             source={{ uri: user?.avatar }}
+//           />
+//         </TouchableOpacity>
+//         <View className="flex flex-col items-start justify-center ml-2">
+//           <Text className="text-xs font-base font-rubik-medium text-black-100">
+//             {greetings},
+//           </Text>
 
-          <Text className="text-base font-rubik text-black-300">
-            {user?.name.split(" ")[0]}
-          </Text>
-        </View>
-      </View>
-      <TouchableOpacity onPress={()=>router.push('/notifications')}>
-        <Image source={icons.bell} className="size-6" />
-      </TouchableOpacity>
-    </View>
-  );
-};
+//           <Text className="text-base font-rubik text-black-300">
+//             {user?.name.split(" ")[0]}
+//           </Text>
+//         </View>
+//       </View>
+//       <TouchableOpacity onPress={() => router.push("/notifications")}>
+//         <Image source={icons.bell} className="size-6" />
+//       </TouchableOpacity>
+//     </View>
+//   );
+// };
 export default function Index() {
   const params = useLocalSearchParams<{
     filter?: string;
     query?: string;
   }>();
+
+
+  const { user } = useGlobalContext();
+  const { greetings } = GetGreetings();
+
 
   const { data: latestProperties, loading: latestPropertiesLoading } =
     useAppwrite({
@@ -96,14 +102,39 @@ export default function Index() {
         }
         ListHeaderComponent={() => (
           <View className="px-5">
-            <HomeHeader />
+            <HeaderBar
+              leftChild={
+                <View className="flex-row items-center">
+                  <TouchableOpacity onPress={() => router.push("/profile")}>
+                    <Image
+                      className="size-12 rounded-full "
+                      source={{ uri: user?.avatar }}
+                    />
+                  </TouchableOpacity>
+                  <View className="flex flex-col items-start justify-center ml-2">
+                    <Text className="text-xs font-base font-rubik-medium text-black-100">
+                      {greetings},
+                    </Text>
+                    <Text className="text-base font-rubik text-black-300">
+                      {user?.name.split(" ")[0]}
+                    </Text>
+                  </View>
+                </View>
+              }
+              containerClass="px-0"
+              back={false}
+            />
             <Search />
             <View className="my-5">
               <View className="flex flex-row items-center justify-between">
                 <Text className="text-xl font-rubik-bold text-black-300">
                   Featured
                 </Text>
-                <TouchableOpacity onPress={()=>router.push('/(root)/properties/properties?filter=Featured')}>
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push("/(root)/properties/properties?filter=Featured")
+                  }
+                >
                   <Text className="text-base font-rubik-medium text-primary-300">
                     See All
                   </Text>
@@ -135,7 +166,13 @@ export default function Index() {
                 <Text className="text-xl font-rubik-bold text-black-300">
                   Our Recommendation
                 </Text>
-                <TouchableOpacity onPress={()=>router.push('/(root)/properties/properties?filter=Recommendation')}>
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push(
+                      "/(root)/properties/properties?filter=Recommendation"
+                    )
+                  }
+                >
                   <Text className="text-base font-rubik-medium text-primary-300">
                     See All
                   </Text>

@@ -1,3 +1,4 @@
+import HeaderBar from "@/components/HeaderBar";
 import NoResults from "@/components/NoResults";
 import ReviewCard from "@/components/ReviewCard";
 import icons from "@/constants/icons";
@@ -8,6 +9,7 @@ import { GetIconByPartialText } from "@/utils/index.utils";
 import { Link, router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   ImageSourcePropType,
@@ -22,12 +24,11 @@ const AgentCard = ({
   email,
   image,
   name,
-  phone,
 }: {
   image: string;
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
 }) => {
   return (
     <View className=" flex-row justify-between items-center mt-5">
@@ -92,10 +93,36 @@ const IconAndTag = ({
 const Property = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { data, loading } = useAppwrite({
+  const { data, loading, error, refetch } = useAppwrite({
     fn: getPropertyById,
     params: { id },
   });
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size={"large"} />
+      </View>
+    );
+  }
+
+  if (!loading && (error || !data)) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-base font-rubik text-black-200 mb-4">
+          Sorry an error occurred. Please try again
+        </Text>
+        <TouchableOpacity
+          onPress={() => refetch({ id })}
+          className="bg-primary-300 rounded-full w-2/3 p-4 h-[50px] justify-center items-center"
+        >
+          <Text className="text-white text-medium font-rubik-bold">
+            Try Again
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-white">
@@ -105,35 +132,29 @@ const Property = () => {
             source={{ uri: data?.image }}
             className="w-full h-[428px]"
             resizeMode="cover"
-          ></Image>
-          <View className="flex absolute w-full px-5 flex-row items-center justify-between mt-5">
-            <TouchableOpacity
-              onPress={() => router.back()}
-              className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center"
-            >
-              <Image
-                source={icons.backArrow}
-                className="size-5"
-                tintColor={"white"}
-              ></Image>
-            </TouchableOpacity>
-            <View className="flex w-fit flex-row gap-4">
-              <TouchableOpacity>
-                <Image
-                  source={icons.heart}
-                  className="size-5"
-                  tintColor={"white"}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Image
-                  source={icons.send}
-                  className="size-5"
-                  tintColor={"white"}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
+          />
+          <HeaderBar
+            containerClass="absolute mt-7"
+            rightChild={
+              <View className="flex w-fit flex-row gap-4">
+                <TouchableOpacity>
+                  <Image
+                    source={icons.heart}
+                    className="size-5"
+                    tintColor={"white"}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image
+                    source={icons.send}
+                    className="size-5"
+                    tintColor={"white"}
+                  />
+                </TouchableOpacity>
+              </View>
+            }
+            tintColor={"white"}
+          />
           <View className="p-4">
             <Text className="text-xl font-rubik-bold">{data?.name}</Text>
             <View className="flex flex-row gap-1 items-center justify-start">
@@ -162,6 +183,9 @@ const Property = () => {
               <IconAndTag icon={icons.area} text={`${data?.area} sqft`} />
             </View>
           </View>
+          <View className="px-4">
+            <View className="border-b-2 border-primary-200" />
+          </View>
           <DetailSection title="Agent">
             <Text className="text-base font-rubik text-black-200">
               {data?.description}
@@ -172,7 +196,6 @@ const Property = () => {
               image={data?.agent.avatar ?? ""}
               name={data?.agent.name ?? ""}
               email={data?.agent.email ?? ""}
-              phone=""
             />
           </DetailSection>
           <DetailSection title="Facilities">
@@ -257,7 +280,7 @@ const Property = () => {
                 </View>
               )}
               {data?.reviews.length! > 1 && (
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/notifications")}>
                   <Text className="text-base font-rubik-medium text-primary-300">
                     See All
                   </Text>
@@ -282,7 +305,7 @@ const Property = () => {
           </DetailSection>
         </View>
       </ScrollView>
-      <View className="absolute bottom-0 left-0 right-0 h-[140px] ">
+      <View className="absolute bottom-0 left-0 right-0 h-[125px] ">
         <View
           style={{
             elevation: Platform.OS === "android" ? 10 : 0,

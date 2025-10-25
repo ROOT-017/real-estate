@@ -26,6 +26,7 @@ export interface Agent extends Models.Document {
   avatar: string;
   email: string;
 }
+
 export interface Review extends Models.Document {
   name: string;
   avatar: string;

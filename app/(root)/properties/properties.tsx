@@ -1,3 +1,4 @@
+import HeaderBar from "@/components/HeaderBar";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
 import { Text } from "react-native";
@@ -7,6 +8,7 @@ const Properties = () => {
   const { filter } = useLocalSearchParams<{ filter?: string }>();
   return (
     <SafeAreaView className="bg-white h-full">
+      <HeaderBar />
       <Text>AllProperties</Text>
       <Text>{filter}</Text>
     </SafeAreaView>

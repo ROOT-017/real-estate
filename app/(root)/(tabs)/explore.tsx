@@ -1,21 +1,14 @@
 import { Card } from "@/components/Cards";
 import Filters from "@/components/Filters";
+import HeaderBar from "@/components/HeaderBar";
 import NoResults from "@/components/NoResults";
 import Search from "@/components/Search";
-import icons from "@/constants/icons";
 import { getProperties } from "@/lib/appwrite";
 import { useAppwrite } from "@/lib/useAppwrite";
 import { getFilterTypeTitle } from "@/utils/index.utils";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Explore = () => {
@@ -62,8 +55,17 @@ const Explore = () => {
         }
         ListHeaderComponent={
           <View className="px-5">
-            <View className="flex flex-row items-center justify-between mt-5">
-              <TouchableOpacity
+            <HeaderBar
+              title="Search for Your Ideal Home"
+              containerClass="px-0"
+              backIconBg={false}
+              titleClass={
+                "text-base mr-2 items-center text-black-300 font-rubik-medium"
+              }
+            />
+
+            {/* <View className="flex flex-row items-center justify-between mt-5">
+              <TouchableOpacity 
                 onPress={() => router.back()}
                 className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center"
               >
@@ -73,15 +75,15 @@ const Explore = () => {
                 Search for Your Ideal Home
               </Text>
               <Image source={icons.bell} className="size-5"></Image>
-            </View>
+            </View> */}
             <Search />
             <View className="mt-5">
               <Filters />
               <Text className="text-xl mt-5 font-rubik-bold text-black-300">
-                Found {properties?.length}{" "}
+                Found {properties?.length}
                 {params.filter && params.filter !== "All"
                   ? getFilterTypeTitle(params.filter)
-                  : "Properties"}
+                  : " Properties"}
               </Text>
             </View>
           </View>

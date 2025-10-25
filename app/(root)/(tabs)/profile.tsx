@@ -3,7 +3,7 @@ import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { logout } from "@/lib/appwrite";
 import { useGlobalContext } from "@/lib/global-provider";
-import { RelativePathString, router } from "expo-router";
+import { RelativePathString, router, useRouter } from "expo-router";
 import React from "react";
 import {
   Alert,
@@ -47,6 +47,7 @@ const SettingsItem = ({
 };
 const Profile = () => {
   const { user, refetch } = useGlobalContext();
+  const router = useRouter()
 
   const handleLogout = async () => {
     const results = await logout();
@@ -67,7 +68,7 @@ const Profile = () => {
       >
         <View className="flex-row justify-between mt-5 items-center">
           <Text className="text-xl font-rubik-bold ">Profile</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>router.navigate('/notifications')}>
             <Image className="size-5" source={icons.bell} />
           </TouchableOpacity>
         </View>

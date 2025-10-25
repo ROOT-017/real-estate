@@ -16,10 +16,7 @@ const ReviewCard = ({
       style={{ elevation: Platform.OS === "android" ? 10 : 0 }}
     >
       <View className="flex flex-row items-center gap-2">
-        <Image
-          source={{ uri: avatar }}
-          className="size-12 rounded-full"
-        ></Image>
+        <Image source={{ uri: avatar }} className="size-12 rounded-full" />
         <Text className="text-base font-rubik-bold text-black-300">{name}</Text>
       </View>
       <Text className="text-base font-rubik-medium text-black-200 my-4">
